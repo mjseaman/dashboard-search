@@ -21,5 +21,5 @@ def index():
     return render_template('index.html', results=results)
 
 if __name__ == '__main__':
-    # Update these parameters to allow external access
-    app.run(host='0.0.0.0', port=5000, debug=True) 
+    # Use this for local development
+    app.run(debug=True) 
