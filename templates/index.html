@@ -38,6 +38,10 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-right: 10px;
+        }
+        .button-group {
+            margin-top: 15px;
         }
         .flash-message {
             padding: 10px;
@@ -62,13 +66,20 @@
     <form method="POST">
         <div class="form-group">
             <label for="grafana_url">Grafana URL:</label>
-            <input type="text" id="grafana_url" name="grafana_url" placeholder="http://your-grafana-instance" required>
+            <input type="text" id="grafana_url" name="grafana_url" placeholder="http://your-grafana-instance" 
+                   value="{{ grafana_url }}" required>
         </div>
         <div class="form-group">
             <label for="api_token">API Token:</label>
-            <input type="password" id="api_token" name="api_token" placeholder="Your Grafana API token" required>
+            <input type="password" id="api_token" name="api_token" placeholder="Your Grafana API token" 
+                   value="{{ api_token }}" required>
         </div>
-        <button type="submit">Get Dashboards</button>
+        <div class="button-group">
+            <button type="submit" name="search">Get Dashboards</button>
+            {% if results %}
+            <button type="submit" name="export" value="1">Export to Excel</button>
+            {% endif %}
+        </div>
     </form>
 
     {% if results %}
@@ -79,6 +90,7 @@
         {% for dash in results %}
             <div class="dashboard">
                 <h2>{{ dash.name }}</h2>
+                <p>📁 Folder: {{ dash.folder }}</p>
                 <p>🔗 <a href="{{ dash.url }}" target="_blank">View Dashboard</a></p>
                 
                 <h3>Table Queries</h3>

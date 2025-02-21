@@ -54,8 +54,14 @@ def get_dashboards_with_tables(grafana_url, api_token):
         table_queries = find_table_panels(dashboard_model.get('panels', []))
         
         if table_queries:
+            # Get folder information
+            folder_title = dashboard.get('folderTitle', 'General')
+            if folder_title == '':
+                folder_title = 'General'
+                
             dashboards_with_tables.append({
                 'name': dashboard['title'],
+                'folder': folder_title,
                 'url': f"{grafana_url}/d/{dashboard_uid}",
                 'table_queries': table_queries
             })
