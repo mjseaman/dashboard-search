@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grafana Dashboards with Tables</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .dashboard {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .query {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .flash-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Grafana Dashboards with Table Panels</h1>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="grafana_url">Grafana URL:</label>
+            <input type="text" id="grafana_url" name="grafana_url" placeholder="http://your-grafana-instance" required>
+        </div>
+        <div class="form-group">
+            <label for="api_token">API Token:</label>
+            <input type="password" id="api_token" name="api_token" placeholder="Your Grafana API token" required>
+        </div>
+        <button type="submit">Get Dashboards</button>
+    </form>
+
+    {% if results %}
+        {% if not results %}
+            <p><em>No dashboards with table panels found.</em></p>
+        {% endif %}
+        
+        {% for dash in results %}
+            <div class="dashboard">
+                <h2>{{ dash.name }}</h2>
+                <p>🔗 <a href="{{ dash.url }}" target="_blank">View Dashboard</a></p>
+                
+                <h3>Table Queries</h3>
+                {% for query in dash.table_queries %}
+                    <div class="query">{{ query }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html> 
